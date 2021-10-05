@@ -3,7 +3,7 @@
             [goog.string :as gstr]
             [goog.string.format]
             ["chart.js" :refer [Chart]]
-            ["color-scheme" :as ColorScheme]))
+            [freshcodeit-pfa.helpers :refer [colors-rgb]]))
 
 (defn costs-by-month
   [transactions]
@@ -13,25 +13,11 @@
           {}
           transactions))
 
-(defn hex-colors
-  []
-  (-> (ColorScheme.)
-      #_(.from_hue 21)
-      (.scheme "triade")
-      (.variation "soft")
-      (.colors)
-      (js->clj)))
-
 (defn chart-colors
   []
-  (let [colors (map (fn [hex] (->> hex
-                                   (partition 2)
-                                   (map #(js/parseInt (apply str %) 16))))
-                    (hex-colors))]
+  (let [colors (colors-rgb)]
     {:borders (mapv #(apply gstr/format "rgb(%s, %s, %s)" %) colors)
      :backgrounds (mapv #(apply gstr/format "rgba(%s, %s, %s, 0.2)" %) colors)}))
-
-
 
 (defn chart-data
   [costs]
