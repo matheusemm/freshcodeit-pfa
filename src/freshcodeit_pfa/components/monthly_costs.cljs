@@ -3,19 +3,19 @@
             [goog.string :as gstr]
             [goog.string.format]
             ["chart.js" :refer [Chart]]
-            [freshcodeit-pfa.helpers :refer [colors-rgb]]))
+            [freshcodeit-pfa.helpers :as helpers]))
 
 (defn costs-by-month
   [transactions]
   (reduce (fn [costs {:keys [date amount]}]
-            (let [month (subs date 0 7)]
+            (let [month (helpers/date-to-month date)]
               (update costs month + amount)))
           {}
           transactions))
 
 (defn chart-colors
   []
-  (let [colors (colors-rgb)]
+  (let [colors (helpers/colors-rgb)]
     {:borders (mapv #(apply gstr/format "rgb(%s, %s, %s)" %) colors)
      :backgrounds (mapv #(apply gstr/format "rgba(%s, %s, %s, 0.2)" %) colors)}))
 

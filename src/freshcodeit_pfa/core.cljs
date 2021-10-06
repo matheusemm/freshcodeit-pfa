@@ -1,16 +1,18 @@
 (ns freshcodeit-pfa.core
     (:require [freshcodeit-pfa.state :as state]
               [freshcodeit-pfa.components.monthly-costs :refer [monthly-costs]]
+              [freshcodeit-pfa.helpers :as helpers]
               [reagent.core :as r]
               [reagent.dom :as d]
-              [clojure.string :as str]))
+              [clojure.string :as str]
+              [tick.core :as tick]))
 
 (defn add-transaction
   [values]
   (let [id (random-uuid)
         {:keys [date payee amount]} @values]
     (swap! state/transactions assoc id {:id id
-                                        :date (str/trim date)
+                                        :date (tick/date date)
                                         :payee (str/trim payee)
                                         :amount (js/parseInt amount)})
     (reset! values {:date "" :payee "" :amount "0"})))
@@ -31,7 +33,7 @@
           [:div.col
            [:label.form-label {:for "date"} "Date"]
            [:input#date.form-control.form-control-sm
-            {:type :text
+            {:type :date
              :value date
              :on-change #(swap! add-values assoc :date (.. % -target -value))}]]
           [:div.col
@@ -65,7 +67,7 @@
              (if (seq transactions)
                (for [{:keys [id date payee amount]} transactions]
                  [:tr.align-baseline {:key id}
-                  [:td date]
+                  [:td (helpers/date-to-str date)]
                   [:td payee]
                   [:td (str "\u20B4" amount)]
                   [:td
