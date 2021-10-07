@@ -1,6 +1,7 @@
 (ns freshcodeit-pfa.core
     (:require [freshcodeit-pfa.state :as state]
               [freshcodeit-pfa.components.monthly-costs :refer [monthly-costs]]
+              [freshcodeit-pfa.components.month-spending :refer [month-spending]]
               [freshcodeit-pfa.helpers :as helpers]
               [reagent.core :as r]
               [reagent.dom :as d]
@@ -77,7 +78,11 @@
 
        [:div.row
         [:div.col
-         [monthly-costs (vals @state/transactions)]]]])))
+         [monthly-costs (vals @state/transactions)]]]
+
+       #_[:div.row
+          [:div.col
+           [month-spending (vals @state/transactions)]]]])))
 
 (defn mount-root []
   (d/render [transactions] (.getElementById js/document "app")))

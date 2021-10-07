@@ -34,8 +34,7 @@
 (defn display-chart
   [transactions]
   (let [context (.getElementById js/document "monthly-costs-canvas")
-        data (-> transactions costs-by-month chart-data)
-        _ (.log js/console data)]
+        data (-> transactions costs-by-month chart-data)]
     (Chart. context data)))
 
 (defn monthly-costs
